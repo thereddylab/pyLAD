@@ -1,0 +1,7 @@
+.eggs/
+build/
+dist/
+doc/_build/
+pLADetector.egg-info
+*.pyc
+*.so
