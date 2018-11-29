@@ -6,10 +6,10 @@ import sys
 import os
 import subprocess
 
-from LADetector.Base import Base
-from LADetector.Parser import Parser
-from LADetector.Mapping import Fastq, Preprocessor
-from LADetector.Segmenter import Segmenter
+from pyLAD.Base import Base
+from pyLAD.Parser import Parser
+from pyLAD.Mapping import Fastq, Preprocessor
+from pyLAD.Segmenter import Segmenter
 
 
 class LADetector(Base):
