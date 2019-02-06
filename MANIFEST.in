@@ -6,9 +6,9 @@
 include MANIFEST.in
 #include INSTALL
 include requirements.txt
-include pLADetector/*.py
-include pLADetector/*.f
-include bin/pLADetector
+include pyLAD/*.py
+include pyLAD/*.f
+include bin/LADetector
 
 
 # documentation

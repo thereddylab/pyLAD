@@ -20,7 +20,6 @@ else:
     from importlib import reload
 
 CLASSIFIERS = """\
-Development Status :: 1 - Beta
 Intended Audience :: Science/Research
 Intended Audience :: Developers
 Programming Language :: Fortran
@@ -38,7 +37,7 @@ Operating System :: MacOS
 MAJOR = 0
 MINOR = 0
 MICRO = 0
-ISRELEASED = False
+ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
@@ -52,9 +51,9 @@ def git_version():
             if v is not None:
                 env[k] = v
         # LANGUAGE is used on win32
-        env['LANGUAGE'] = 'C'
-        env['LANG'] = 'C'
-        env['LC_ALL'] = 'C'
+        env['LANGUAGE'] = 'Fortran'
+        env['LANG'] = 'Fortran'
+        env['LC_ALL'] = 'Fortran'
         out, err = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE, env=env
                                     ).communicate()
@@ -146,10 +145,10 @@ def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration(
         DISTNAME, parent_package, top_path,
-        description='Python-based LAD analysis tool',
-        maintainer='Michael Sauria',
-        maintainer_email='mike.sauria@gmail.com',
-        url='https://github.com/thereddylab/pyLAD',
+        #description='Python-based LAD analysis tool',
+        #maintainer='Michael Sauria',
+        #maintainer_email='mike.sauria@gmail.com',
+        #url='https://github.com/thereddylab/pyLAD',
         scripts=['bin/LADetector'],
         )
     config.add_data_files('pyLAD/__init__.py')
