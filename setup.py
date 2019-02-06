@@ -34,7 +34,7 @@ Operating System :: MacOS
 
 """
 
-MAJOR = 0
+MAJOR = 1
 MINOR = 0
 MICRO = 0
 ISRELEASED = True
@@ -193,6 +193,7 @@ def setup_package():
         cmdclass=cmdclass,
         package_dir={'': './'},
         install_requires=['numpy', 'scipy', 'pysam'],
+        scripts = ['bin/LADetector'],
         classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
         platforms=["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
         test_suite='nose.collector',
