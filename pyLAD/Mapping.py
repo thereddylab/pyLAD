@@ -277,11 +277,14 @@ class Fastq(Base):
             bamfile = open(bam_fnames[i], 'wb')
             statsfile = open(bam_fnames[i].replace('.bam', '.stats'), 'wb')
             # Start bowtie subprocess
+            self.logger.debug("Running command '%s | samtools view -b - > %s'" % (' '.join(
+                self.arguments + args[i] + ['--threads', '%i' % threads,
+                index, fastq_fnames[i]]), bamfile))
             mapping_task = subprocess.Popen(
                 self.arguments + args[i] + ['--threads', '%i' % threads,
                                             index, fastq_fnames[i]],
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+                stderr=statsfile)
             # Start samtools subprocess
             samtools_task = subprocess.Popen(['samtools', 'view', '-b',
                                               '-'],
@@ -290,12 +293,12 @@ class Fastq(Base):
                                              stdout=bamfile)
             # Start grep subprocess to remove stats output from bowtie that
             # we don't care about
-            grep_task = subprocess.Popen(['grep', '-v', 'Warning'],
-                                         bufsize=1,
-                                         stdin=mapping_task.stderr,
-                                         stdout=statsfile)
+            #grep_task = subprocess.Popen(['grep', '-v', 'Warning'],
+            #                             bufsize=1,
+            #                             stdin=mapping_task.stderr,
+            #                             stdout=statsfile)
             samtools_task.wait()
-            grep_task.wait()
+            #grep_task.wait()
             bamfile.close()
             statsfile.close()
 
