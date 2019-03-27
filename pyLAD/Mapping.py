@@ -263,10 +263,10 @@ class Fastq(Base):
                  fastq.replace('.fastq', '.un.fastq'), '--max',
                  fastq.replace('.fastq', '.mult.fastq')],
                 ['--seed', str(seed + 1), '--un',
-                 fastq.replace('.fastq', '.un1.fastq'), '-5', trim_size,
+                 fastq.replace('.fastq', '.un1.fastq'), '-5', str(trim_size),
                  '--max', fastq.replace('.fastq', '.mult1.fastq')],
                 ['--seed', str(seed + 2), '--un',
-                 fastq.replace('.fastq', '.un2.fastq'), '-3', trim_size]]
+                 fastq.replace('.fastq', '.un2.fastq'), '-3', str(trim_size)]]
         fastq_fnames = [fastq,
                         fastq.replace('.fastq', '.un.fastq'),
                         fastq.replace('.fastq', '.un1.fastq')]
