@@ -88,6 +88,10 @@ class Parser(Base):
         # Format remaining arguments correctly
         args.ADAPTERS = args.ADAPTERS.encode('UTF-8').split(b',')
         args.SPLIT = args.SPLIT.encode('UTF-8').split(b',')
+        if os.path.dirname(args.NAME) == '':
+          args.OUTDIR = '.'
+        else:
+          args.OUTDIR = os.path.dirname(args.NAME)
         return args
 
     def Generate_Parser(self):

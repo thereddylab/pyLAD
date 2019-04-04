@@ -160,6 +160,8 @@ class RE(Base):
             return None
         self.logger.info("Mapping restriction enyzme recognition sites")
         # Start bowtie as a subprocess
+        self.logger.debug("Running command '%s'" % ' '.join(self.arguments
+                                                            + [index, '-']))
         mapping = subprocess.Popen(
             self.arguments + [index, '-'], stdin=subprocess.PIPE,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -279,12 +281,12 @@ class Fastq(Base):
             # Start bowtie subprocess
             self.logger.debug("Running command '%s | samtools view -b - > %s'" % (' '.join(
                 self.arguments + args[i] + ['--threads', '%i' % threads,
-                index, fastq_fnames[i]]), bamfile))
+                index, fastq_fnames[i]]), bam_fnames[i]))
             mapping_task = subprocess.Popen(
                 self.arguments + args[i] + ['--threads', '%i' % threads,
                                             index, fastq_fnames[i]],
                 stdout=subprocess.PIPE,
-                stderr=statsfile)
+                stderr=subprocess.PIPE)
             # Start samtools subprocess
             samtools_task = subprocess.Popen(['samtools', 'view', '-b',
                                               '-'],
@@ -293,12 +295,12 @@ class Fastq(Base):
                                              stdout=bamfile)
             # Start grep subprocess to remove stats output from bowtie that
             # we don't care about
-            #grep_task = subprocess.Popen(['grep', '-v', 'Warning'],
-            #                             bufsize=1,
-            #                             stdin=mapping_task.stderr,
-            #                             stdout=statsfile)
+            grep_task = subprocess.Popen(['grep', '-v', 'Warning'],
+                                         bufsize=1,
+                                         stdin=mapping_task.stderr,
+                                         stdout=statsfile)
             samtools_task.wait()
-            #grep_task.wait()
+            grep_task.wait()
             bamfile.close()
             statsfile.close()
 

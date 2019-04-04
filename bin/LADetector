@@ -30,12 +30,12 @@ class LADetector(Base):
 
     def load_segmenter(self):
         # If needed, make the output directory
-        subprocess.Popen(['mkdir', '-p', self.args.NAME])
+        subprocess.Popen(['mkdir', '-p', self.args.OUTDIR])
 
         self.segmenter = Segmenter(verbose=self.args.VERBOSE)
         # Try loading a saved segmenter file
-        if os.path.exists("%s/%s.npz" % (self.args.NAME, self.args.NAME)):
-            self.segmenter.load("%s/%s.npz" % (self.args.NAME, self.args.NAME))
+        if os.path.exists("%s.npz" % (self.args.NAME)):
+            self.segmenter.load("%s.npz" % (self.args.NAME))
 
         # Load RE data
         if (self.segmenter.data is None
@@ -57,7 +57,7 @@ class LADetector(Base):
         for cond in self.args.FASTQ:
             self.args.BAM.append([])
             for fname in cond:
-                bam_fname = ("%s/%s.bam" % (self.args.NAME,
+                bam_fname = ("%s/%s.bam" % (self.args.OUTDIR,
                              fname.split('/')[-1].split('.fastq')[0]))
                 if (len(self.args.SPLIT) == 0
                         and len(self.args.ADAPTERS) == 0
@@ -65,7 +65,7 @@ class LADetector(Base):
                     preproc_fname = None
                 else:
                     preproc_fname = ("%s/%s.preprocessed.fastq" % (
-                        self.args.NAME,
+                        self.args.OUTDIR,
                         fname.split('/')[-1].split('.fastq')[0]))
                 if (
                         os.path.exists(bam_fname)
@@ -83,7 +83,7 @@ class LADetector(Base):
                     if (preproc_fname is not None
                             and not os.path.exists(preproc_fname)):
                         Preprocessor(fastq=fname,
-                                     outdir=self.args.NAME,
+                                     outdir=self.args.OUTDIR,
                                      threads=self.args.THREADS,
                                      quality_trim=self.args.QTRIM,
                                      quality_cutoff=self.args.QCUTOFF,
@@ -102,7 +102,7 @@ class LADetector(Base):
                     Fastq(fastq=fastq_fname,
                           index=self.args.INDEX,
                           threads=self.args.THREADS,
-                          outdir=self.args.NAME,
+                          outdir=self.args.OUTDIR,
                           multimapping=self.args.MULTIMAPPING,
                           trim_size=self.args.TRIMSIZE,
                           seed=self.args.SEED,
@@ -147,20 +147,20 @@ class LADetector(Base):
                                                    maxdip=self.args.MAXDIP)
 
     def write_results(self):
-        self.segmenter.save("%s/%s.npz" % (self.args.NAME, self.args.NAME))
+        self.segmenter.save("%s.npz" % (self.args.NAME))
         if self.args.BEDGRAPH:
             for data in ['score', 'treatment', 'control']:
                 self.segmenter.write_bedgraph(
                     target=data,
-                    fname="%s/%s_%s.bg" %
-                    (self.args.NAME, self.args.NAME, data))
+                    fname="%s_%s.bg" %
+                    (self.args.NAME, data))
         for data in ['LADs', 'DIPs']:
             self.segmenter.write_bed(
                 target=data,
-                fname="%s/%s_%s.bed" % (self.args.NAME, self.args.NAME, data))
+                fname="%s_%s.bed" % (self.args.NAME, data))
         if self.args.PLOT:
             self.segmenter.plot_scores(
-                fname="%s/%s.pdf" % (self.args.NAME, self.args.NAME),
+                fname="%s.pdf" % (self.args.NAME),
                 binsize=self.args.PBINSIZE,
                 show_lads=self.args.LADS,
                 show_dips=self.args.DIPS,
